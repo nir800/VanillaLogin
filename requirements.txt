@@ -1,5 +1,0 @@
-flask
-requests
-xmltodict
-netaddr
-pyats[library]
