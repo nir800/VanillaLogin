@@ -20,7 +20,7 @@ switch_enable = os.environ.get('SWITCH_ENABLE', "")
 voucher_group_A = "AAA-Vouchers"
 voucher_group_B = "BBB-Vouchers"
 voucher_group_C = "CCC-Vouchers"
-timeout = 1 * 60 # in minutes
+timeout = 15 * 60 # in minutes
 
 headers = {"Content-Type": "application/json",
            "Accept": "application/json"}
