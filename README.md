@@ -68,15 +68,19 @@ SWITCH_ENABLE= <enable password for network devices>
 ### Create a Docker image
 `docker build -t vanilla-ise .`
 
-### Run the Docker
-'docker run --rm -ti -p 5000:5000 --env-file ./env.txt -v my-data:/VanillaLogin/data main/vanilla-ise
+### For persistant create docker volume on local OS 
+docker volume create my-data
+docker volume ls
+docker volume inspect my-data
 
+### Run the Docker
+`docker run --rm -ti -p 5000:5000 --env-file ./env.txt -v my-data:/VanillaLogin/data main/vanilla-ise`
 `docker run -d --env-file <path to env file> -v <path to data dir>:/Vanilla-ISE/data obrigg/vanilla-ise`
 
 running the Docker in interactive mode:
 `docker run -ti --env-file <path to env file> -v <path to data dir>:/Vanilla-ISE/data obrigg/vanilla-ise`
 
-----
+
 ### Licensing info
 Copyright (c) 2020 Cisco and/or its affiliates.
 
