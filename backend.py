@@ -13,6 +13,8 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 ######   Setting up the environment ######
+ise_user = os.environ.get('ISE_USER', "admin")
+ise_password = os.environ.get('ISE_PASSWORD', "")
 base_url = "https://" + os.environ.get('ISE_IP', "") + ":9060/ers/config/"
 switch_user = os.environ.get('SWITCH_USER', "netadmin")
 switch_password = os.environ.get('SWITCH_PASS', "")
@@ -22,10 +24,9 @@ voucher_group_B = "BBB-Vouchers"
 voucher_group_C = "CCC-Vouchers"
 timeout = 15 * 60 # in minutes
 
+auth = HTTPBasicAuth(ise_user, ise_password)
 headers = {"Content-Type": "application/json",
            "Accept": "application/json"}
-# auth = HTTPBasicAuth(ise_user, ise_password)
-auth = ""
 
 testbed_template = {'devices': {
     'device': {
@@ -154,15 +155,17 @@ def remove_ise_endpoint_group(mac_address: str, group_name: str):
 
 
 def initialize_ise(name, passw):
+    '''
+    This function validates the user-provided credentials against ISE.
+    If the credentials allow access to ISE's APIs - it will return "Done", otherwise - "ERROR".
+    '''
     print(f"Logging into ISE with username: {name}")
     url = "https://" + os.environ.get('ISE_IP', "") + ":9060/ers/sdk"
-    Iresponse = requests.get(url=url, auth=requests.auth.HTTPBasicAuth(name,passw), headers=headers, verify=False)
-    # print(Iresponse.status_code)
-    # print(Iresponse.content)
+    user_auth = HTTPBasicAuth(name,passw)
+    Iresponse = requests.get(url=url, headers=headers, auth=user_auth, verify=False)
     if Iresponse.status_code == 200:
        print(f"User {name} has suffecient permissions to login to ISE") 
        return("Done")
-
     else:
         print(f"ERROR: Can't access ISE/failed User. Code: {Iresponse.status_code}")
         return("ERROR")

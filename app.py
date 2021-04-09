@@ -72,7 +72,7 @@ def index():
     can be manually triggered by a "Query Device" link in each table row and thereby
     for each NAD device.
     '''
-    if session.get('logged_in') > int(time()):
+    if type(session.get('logged_in')) == int and session.get('logged_in') > int(time()):
         session['logged_in'] = int(time()) + backend.timeout
         print(f"Login extended until: {ctime(session['logged_in'])}")
         try:
@@ -107,7 +107,7 @@ def deviceQuery():
     This function shows an empty page with IP query field and button (GET)
     or a list of queried devices with associated session information (POST).
     '''
-    if session.get('logged_in') > int(time()):
+    if type(session.get('logged_in')) == int and session.get('logged_in') > int(time()):
         session['logged_in'] = int(time()) + backend.timeout
         print(f"Login extended until: {ctime(session['logged_in'])}")
         try:
@@ -138,7 +138,7 @@ def voucher():
     or revokes existing once (POST). For better user experience the voucher data
     is converted beforehand.
     '''
-    if session.get('logged_in') > int(time()):
+    if type(session.get('logged_in')) == int and session.get('logged_in') > int(time()):
         session['logged_in'] = int(time()) + backend.timeout
         print(f"Login extended until: {ctime(session['logged_in'])}")
         try:
@@ -193,7 +193,7 @@ def endpointQuery():
     This function shows an empty page with MAC address query field and button (GET)
     or a list of queried endpoint devices with associated auth status (POST).
     '''
-    if session.get('logged_in') > int(time()):
+    if type(session.get('logged_in')) == int and session.get('logged_in') > int(time()):
         session['logged_in'] = int(time()) + backend.timeout
         print(f"Login extended until: {ctime(session['logged_in'])}")
         try:
@@ -229,7 +229,6 @@ def login():
             print("login view - Successful Login")
             session['logged_in'] = int(time()) + backend.timeout
             print(f"Logged in until: {ctime(session['logged_in'])}")
-            backend.auth = HTTPBasicAuth(name,passw)
             return redirect(url_for('index'))
         else:
             print("Failed login")
