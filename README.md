@@ -63,7 +63,7 @@ SWITCH_USER= <username for network devices>
 SWITCH_PASS= <password for network devices>
 SWITCH_ENABLE= <enable password for network devices>
 
-* In the current version there is no need to provide ISE_USER and ISE_Password with environment file.
+
 
 ### Create a Docker image
 ` docker build . -t main/vanilla-ise --no-cache`
