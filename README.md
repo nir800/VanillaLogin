@@ -62,12 +62,15 @@ ISE_PASSWORD= <ISE password>
 SWITCH_USER= <username for network devices>
 SWITCH_PASS= <password for network devices>
 SWITCH_ENABLE= <enable password for network devices>
-```
+
+* Current version there is no need to provide ISE_USER and ISE_Password, it is part of the login page *
 
 ### Create a Docker image
 `docker build -t vanilla-ise .`
 
 ### Run the Docker
+'docker run --rm -ti -p 5000:5000 --env-file ./env.txt -v my-data:/VanillaLogin/data main/vanilla-ise
+
 `docker run -d --env-file <path to env file> -v <path to data dir>:/Vanilla-ISE/data obrigg/vanilla-ise`
 
 running the Docker in interactive mode:
