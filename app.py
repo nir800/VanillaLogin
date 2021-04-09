@@ -13,8 +13,9 @@ or implied.
 
 # Import Section
 from flask import Flask, render_template, request, url_for, redirect, session
+from requests.auth import HTTPBasicAuth
 import backend
-from time import ctime, sleep
+from time import ctime, sleep, time
 from threading import Thread
 
 # Global Variables
@@ -71,29 +72,31 @@ def index():
     can be manually triggered by a "Query Device" link in each table row and thereby
     for each NAD device.
     '''
-    if session.get('logged_in'):    
-                    try:
-                        if request.method == 'GET':
+    if session.get('logged_in') > int(time()):
+        session['logged_in'] = int(time()) + backend.timeout
+        print(f"Login extended until: {ctime(session['logged_in'])}")
+        try:
+            if request.method == 'GET':
 
-                            device_list = backend.get_all_NADs()
-                            propagate_backend_exception(device_list)
+                device_list = backend.get_all_NADs()
+                propagate_backend_exception(device_list)
 
-                            return render_template('deviceList.html', device_list=device_list)
+                return render_template('deviceList.html', device_list=device_list)
 
-                        elif request.method == 'POST':
+            elif request.method == 'POST':
 
-                            ip_address = request.form.get("ip_address")
-                            relevant_sessions = backend.get_device_auth_sessions(ip_address)
-                            propagate_backend_exception(relevant_sessions)
+                ip_address = request.form.get("ip_address")
+                relevant_sessions = backend.get_device_auth_sessions(ip_address)
+                propagate_backend_exception(relevant_sessions)
 
-                            print(relevant_sessions)
-                            print(ip_address)
+                print(relevant_sessions)
+                print(ip_address)
 
-                            return render_template('deviceQuery.html', post_request_done=True, ip_address=ip_address, relevant_sessions=relevant_sessions)
+                return render_template('deviceQuery.html', post_request_done=True, ip_address=ip_address, relevant_sessions=relevant_sessions)
 
-                    except Exception as e:
-                        print(e)
-                        return render_template('deviceList.html', error=True, errorcode=e, reloadlink='/')
+        except Exception as e:
+            print(e)
+            return render_template('deviceList.html', error=True, errorcode=e, reloadlink='/')
     else:
         print("First you need to login")
         return redirect(url_for('login'))
@@ -104,23 +107,25 @@ def deviceQuery():
     This function shows an empty page with IP query field and button (GET)
     or a list of queried devices with associated session information (POST).
     '''
-    if session.get('logged_in'):
-                try:
-                    if request.method == 'GET':
+    if session.get('logged_in') > int(time()):
+        session['logged_in'] = int(time()) + backend.timeout
+        print(f"Login extended until: {ctime(session['logged_in'])}")
+        try:
+            if request.method == 'GET':
 
-                        return render_template('deviceQuery.html', post_request_done=False, ip_address='', relevant_sessions={})
+                return render_template('deviceQuery.html', post_request_done=False, ip_address='', relevant_sessions={})
 
-                    elif request.method == 'POST':
+            elif request.method == 'POST':
 
-                        ip_address = request.form.get("ip_address")
-                        relevant_sessions = backend.get_device_auth_sessions(ip_address)
-                        propagate_backend_exception(relevant_sessions)
+                ip_address = request.form.get("ip_address")
+                relevant_sessions = backend.get_device_auth_sessions(ip_address)
+                propagate_backend_exception(relevant_sessions)
 
-                        return render_template('deviceQuery.html', post_request_done=True, ip_address=ip_address, relevant_sessions=relevant_sessions)
+                return render_template('deviceQuery.html', post_request_done=True, ip_address=ip_address, relevant_sessions=relevant_sessions)
 
-                except Exception as e:
-                    print(e)
-                    return render_template('deviceQuery.html', error=True, errorcode=e)
+        except Exception as e:
+            print(e)
+            return render_template('deviceQuery.html', error=True, errorcode=e)
     else:
         print("First you need to login")
         return redirect(url_for('login'))
@@ -133,7 +138,9 @@ def voucher():
     or revokes existing once (POST). For better user experience the voucher data
     is converted beforehand.
     '''
-    if session.get('logged_in'):
+    if session.get('logged_in') > int(time()):
+        session['logged_in'] = int(time()) + backend.timeout
+        print(f"Login extended until: {ctime(session['logged_in'])}")
         try:
             if request.method == 'GET':
 
@@ -186,23 +193,25 @@ def endpointQuery():
     This function shows an empty page with MAC address query field and button (GET)
     or a list of queried endpoint devices with associated auth status (POST).
     '''
-    if session.get('logged_in'):
-                try:
-                    if request.method == 'GET':
+    if session.get('logged_in') > int(time()):
+        session['logged_in'] = int(time()) + backend.timeout
+        print(f"Login extended until: {ctime(session['logged_in'])}")
+        try:
+            if request.method == 'GET':
 
-                        return render_template('endpointQuery.html', post_request_done=False, endpoint_list={}, mac_address='')
+                return render_template('endpointQuery.html', post_request_done=False, endpoint_list={}, mac_address='')
 
-                    elif request.method == 'POST':
+            elif request.method == 'POST':
 
-                        mac_address = request.form.get("mac_address")
-                        endpoint_list = backend.check_ise_auth_status(mac_address)
-                        propagate_backend_exception(endpoint_list)
+                mac_address = request.form.get("mac_address")
+                endpoint_list = backend.check_ise_auth_status(mac_address)
+                propagate_backend_exception(endpoint_list)
 
-                        return render_template('endpointQuery.html', post_request_done=True, endpoint_list=endpoint_list, mac_address=mac_address)
+                return render_template('endpointQuery.html', post_request_done=True, endpoint_list=endpoint_list, mac_address=mac_address)
 
-                except Exception as e:
-                    print(e)
-                    return render_template('endpointQuery.html', error=True, errorcode=e)
+        except Exception as e:
+            print(e)
+            return render_template('endpointQuery.html', error=True, errorcode=e)
     else:
         print("First you need to login")
         return redirect(url_for('login'))
@@ -218,7 +227,9 @@ def login():
         x  = backend.initialize_ise(name, passw)
         if x == "Done":
             print("login view - Successful Login")
-            session['logged_in'] = True
+            session['logged_in'] = int(time()) + backend.timeout
+            print(f"Logged in until: {ctime(session['logged_in'])}")
+            backend.auth = HTTPBasicAuth(name,passw)
             return redirect(url_for('index'))
         else:
             print("Failed login")
@@ -230,4 +241,3 @@ if __name__ == "__main__":
     t = Thread(target=voucher_cleanup_loop)
     t.start()
     app.run(host='0.0.0.0', debug=True, threaded=True)
-

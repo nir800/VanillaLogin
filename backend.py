@@ -13,8 +13,6 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 ######   Setting up the environment ######
-ise_user = os.environ.get('ISE_USER', "admin")
-ise_password = os.environ.get('ISE_PASSWORD', "")
 base_url = "https://" + os.environ.get('ISE_IP', "") + ":9060/ers/config/"
 switch_user = os.environ.get('SWITCH_USER', "netadmin")
 switch_password = os.environ.get('SWITCH_PASS', "")
@@ -22,10 +20,12 @@ switch_enable = os.environ.get('SWITCH_ENABLE', "")
 voucher_group_A = "AAA-Vouchers"
 voucher_group_B = "BBB-Vouchers"
 voucher_group_C = "CCC-Vouchers"
+timeout = 15 * 60 # in minutes
 
 headers = {"Content-Type": "application/json",
            "Accept": "application/json"}
-auth = HTTPBasicAuth(ise_user, ise_password)
+# auth = HTTPBasicAuth(ise_user, ise_password)
+auth = ""
 
 testbed_template = {'devices': {
     'device': {
@@ -153,29 +153,16 @@ def remove_ise_endpoint_group(mac_address: str, group_name: str):
         return("ERROR")
 
 
-#def initialize_ise(name, passw):
-#    ise_user = name 
-#    ise_password = passw
-#    auth = HTTPBasicAuth(ise_user, ise_password)
-#    print(auth)
-#    return("Done")    
-
-
 def initialize_ise(name, passw):
-    print(name + "Username from backend")
-    print(passw +  "Password from backend")
+    print(f"Logging into ISE with username: {name}")
     url = "https://" + os.environ.get('ISE_IP', "") + ":9060/ers/sdk"
-    print(url)
     Iresponse = requests.get(url=url, auth=requests.auth.HTTPBasicAuth(name,passw), headers=headers, verify=False)
-    print(Iresponse.status_code)
-    print(Iresponse.content)
+    # print(Iresponse.status_code)
+    # print(Iresponse.content)
     if Iresponse.status_code == 200:
-#        if response.json()['SearchResult']['resources'][0]["name"] == name:
-       print("User exists!!!") 
+       print(f"User {name} has suffecient permissions to login to ISE") 
        return("Done")
-#    else:
-#           print(f"ERROR: User not found")
-#           return("NotFound")
+
     else:
         print(f"ERROR: Can't access ISE/failed User. Code: {Iresponse.status_code}")
         return("ERROR")
