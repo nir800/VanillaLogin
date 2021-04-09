@@ -66,7 +66,7 @@ SWITCH_ENABLE= <enable password for network devices>
 * In the current version there is no need to provide ISE_USER and ISE_Password with environment file.
 
 ### Create a Docker image
-`docker build -t VanillaLogin .`
+` docker build . -t main/vanilla-ise --no-cache`
 
 ### For persistant create docker volume on local OS 
 docker volume create my-data
