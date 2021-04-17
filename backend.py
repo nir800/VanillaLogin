@@ -4,6 +4,7 @@ import os
 import requests
 import json
 import xmltodict
+import decrypt
 from time import time
 from netaddr import *
 from pprint import pprint
@@ -14,7 +15,9 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 ######   Setting up the environment ######
 ise_user = os.environ.get('ISE_USER', "admin")
-ise_password = os.environ.get('ISE_PASSWORD', "")
+ise_password_encrypt = os.environ.get('ISE_PASSWORD', "")
+ise_password = decrypt.decrypt_message(ise_password_encrypt)
+#ise_password = os.environ.get('ISE_PASSWORD', "")
 base_url = "https://" + os.environ.get('ISE_IP', "") + ":9060/ers/config/"
 switch_user = os.environ.get('SWITCH_USER', "netadmin")
 switch_password = os.environ.get('SWITCH_PASS', "")
