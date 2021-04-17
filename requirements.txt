@@ -2,4 +2,5 @@ flask
 requests
 xmltodict
 netaddr
+cryptography
 pyats[library]
