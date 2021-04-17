@@ -79,6 +79,13 @@ docker volume inspect my-data
 running the Docker in interactive mode:
 `docker run -ti --env-file <path to env file> -v <path to data dir>:/Vanilla-ISE/data obrigg/vanilla-ise`
 
+## Password Encryption with shared key for environment varaible. There is a need to locate secret key and add 
+   encrypted password to enviroment file.
+ISE_IP=192.168.103.97
+ISE_USER=admin
+ISE_PASSWORD=gAAAAABgeztcbEoTVcqrYZ0H8YuL3sqEc5TD8Fg6JHO7JmSSW__NmX2_fH-24ilEzNhfGYQEqfC51LJkSrtSo8RmYit8SaTe0A==
+
+
 
 ### Licensing info
 Copyright (c) 2020 Cisco and/or its affiliates.
