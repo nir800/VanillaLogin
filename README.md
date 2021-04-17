@@ -84,6 +84,7 @@ running the Docker in interactive mode:
 ISE_IP=192.168.103.97
 ISE_USER=admin
 ISE_PASSWORD=gAAAAABgeztcbEoTVcqrYZ0H8YuL3sqEc5TD8Fg6JHO7JmSSW__NmX2_fH-24ilEzNhfGYQEqfC51LJkSrtSo8RmYit8SaTe0A==
+Shared_Key=CcNkS_0F2wvNKYOss2xOwhgBcEtExEdwu49fNGrl7qw
 
 
 
